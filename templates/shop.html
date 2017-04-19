@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %} Shop list {% endblock %}
+
+{% block head %}
+{{super()}}
+{% endblock %}
+
+{% block body %}
+
+{% block content %}
+<div class="bd-pageheader my-2 rounded">
+    <div class="container">
+        <h1>Shops</h1>
+    </div>
+</div>
+<div class="container-fluid my-2 rounded">
+    {% if shops|count > 0 %}
+        {% for shop in shops %}
+        <div class="card">
+            <div class="card-header" role="tab">
+                <h5 class="mb-0" style="color:blue">{{shop.name}}
+                    <a class="btn btn-link" href="{{ url_for('edit_shop', shop_id=shop.id) }}"><span class="fa fa-edit fa-2x"></span></a>
+                    <form action="{{ url_for('delete_shop', shop_id=shop.id) }}" method="post">
+                        <button class="btn btn-link"><span class="fa fa-trash-o fa-2x"></span></button>
+                    </form>
+                </h5>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="container-fluid my-2 rounded">
+    <form class = "form-inline" method="POST" action="{% if sp is defined %}{{ url_for('edit_shop',shop_id=sp.id)}}{% else %}/new-shop{% endif %}">
+        <div class="form-group">
+            {{ form.csrf_token }}
+            <div class="form-group">{{ form.name }}</div>
+            <div class="form-group"><button class="btn btn-primary" type="submit">{%if sp%}Save{% else %}Add{%endif%}</button></div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% endblock %}
