@@ -29,10 +29,11 @@ def parse_data():
 def list_all():
     form=ListForm()
     itemform = ItemForm()
+    catform = CategoryForm()
     
     return render_template(
         'shopping.html',
-        lists=Slist.query.all(),categories=Category.query.all(),products=Product.query.all(),items = Item.query.all(),form=form,itemform=itemform)
+        lists=Slist.query.all(),categories=Category.query.all(),products=Product.query.all(),items = Item.query.all(),form=form,itemform=itemform,catform=catform)
 
 @app.route('/new-item/', methods=['POST'])
 def new_item():
@@ -114,8 +115,8 @@ def new_category():
             category = Category(name=form.name.data, descr_short=form.descr_short.data)
             db.session.add(category)
             db.session.commit()
-            return redirect('/new-category')
-    return render_template('category.html', categories=Category.query.all(),form=form)
+    return redirect(url_for('list_all'))
+    #return render_template('category.html', categories=Category.query.all(),form=form)
 
 @app.route('/edit-category/<int:category_id>', methods=['GET','POST'])
 def edit_category(category_id):
