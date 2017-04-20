@@ -33,7 +33,7 @@
 
     <div class="tab-content mt-4">
         {% for list in lists %}
-        <div class="tab-pane fade" id="{{list.name}}" role="tabpanel">
+        <div class="tab-pane" id="{{list.name}}" role="tabpanel">
             <ul class="list-group">
                 {% if list.items %}
                 <li class="list-group-item justify-content-md-left border-0">
@@ -188,20 +188,34 @@
 
 <script>
     var $SCRIPT_ROOT={{ request.script_root|tojson|safe }};
+    var lastTab = localStorage.getItem('lastTab');
+    if (lastTab) {
+        $('#listtab a[href="' + lastTab + '"]').tab('show');
+    }
+    else
+    {
+        $('#listtab a:first').tab('show');
+        localStorage.setItem('lastTab', $('#listtab a:first').attr('href'));
+    }
+
     $(document).ready(function(){
 
 
         $('[data-toggle="tooltip"]').tooltip();
 
-        var lastTab = localStorage.getItem('lastTab');
-
-        if (lastTab) {
-            $('[href="' + lastTab + '"]').tab('show');
+/*        var lastTab = localStorage.getItem('lastTab');
+        console.log('lasttab='+lastTab);
+        if (lastTab.length>1 && lastTab!="undefined") {
+            console.log('if');
+            $('#listtab a[href="' + lastTab + '"]').tab('show');
         }
         else
         {
-            $('a[data-toggle="tab"]').first().tab('show');
+            console.log('else');
+            $('#listtab a:first').tab('show');
+            localStorage.setItem('lastTab', $('#listtab a:first').attr('href'));
         }
+*/        
 
 
         $("#newListForm").submit(function(e){
@@ -292,17 +306,17 @@
             $(".delList").data("id",list_id);
             localStorage.setItem('lastTab', $(this).attr('href'));
         });
-        
+
         $('.list-group-item').hover(function(){
             item_id=this.id;
-            console.log("show #itemDelButton_"+item_id);
+            //console.log("show #itemDelButton_"+item_id);
             $(this).find('#itemDelButton_'+item_id).show();
         },function(){
             item_id=this.id;
-            console.log("hide #itemDelButton_"+item_id);
+            //console.log("hide #itemDelButton_"+item_id);
             $(this).find('#itemDelButton_'+item_id).hide();
         });
-        
+
     });
 </script>
 
