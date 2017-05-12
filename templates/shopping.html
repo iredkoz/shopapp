@@ -11,13 +11,13 @@
 
 <div class="bd-pageheader my-2 rounded">
     <div class="container-fluid">
-        <h1 class="text-center">Shopping List</h1>
+        <h3 class="text-center">Shopping List</h3>
     </div>
 </div>
 
 <div class="container-fluid my-2 rounded">
     {% if lists|count > 0 %}
-    <ul id="listtab" class="nav nav-tabs" role="tablist">
+    <ul id="listtab" class="nav nav-tabs flex-column flex-sm-row" role="tablist">
         {% for list in lists %}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#{{list.name}}" role="tab" data="{{list.name}}" data-id="{{list.id}}" data-loop="{{loop.index}}"><strong>{{list.name}}</strong></a>
@@ -37,35 +37,35 @@
             <ul class="list-group">
                 {% if list.items %}
                 <li class="list-group-item justify-content-md-left border-0">
-                    <div class="col-xs-4 col-2">
+                    <div class="col">
                         {#<b>Done!</b>#}
                     </div>
-                    <div class="col-xs-6 col-4">
+                    <div class="col-4">
                         <b>Product</b>
                     </div>
-                    <div class="col-xs-2 col-2 hidden-xs-down">
+                    <div class="col hidden-xs-down">
                         <b>Qnty</b>
                     </div>
-                    <div class="col-xs-1 col-2 hidden-xs-down">
+                    <div class="col hidden-xs-down">
                         <b>Price</b>
                     </div>
-                    <div class="col-2 invisible">
+                    <div class="col invisible">
                         <b>Shop</b>
                     </div>
                 </li>
                 {%endif%}
                 {% for item in items|sort(attribute='shop.name') if item.slist.name == list.name %}
 
-                <li class="list-group-item {#list-group-item-action#} justify-content-start border-left-0 border-right-0{% if item.chk %} list-group-item-success{% endif %}" {% if item.chk %}style="text-decoration:line-through"{% endif %} id="{{item.id}}">
+                <li class="list-group-item justify-content-start border-left-0 border-right-0{% if item.chk %} list-group-item-success{% endif %}" {% if item.chk %}style="text-decoration:line-through"{% endif %} id="{{item.id}}">
 
-                    <div class="col-xs-4 col-2"><form method="post" action="{{ url_for('check_item', item_id=item.id) }}"><button class="btn btn-link">{% if item.chk %}<i class="fa fa-check-square-o fa-lg"></i>{%else%}<i class="fa fa-square-o fa-lg"></i>{%endif%}</button></form>
+                    <div class="col col"><form method="post" action="{{ url_for('check_item', item_id=item.id) }}"><button class="btn btn-link">{% if item.chk %}<i class="fa fa-check-square-o fa-lg"></i>{%else%}<i class="fa fa-square-o fa-lg"></i>{%endif%}</button></form>
                     </div>
 
-                    <div class="col-xs-6 col-4"><a href="#">{{item.product.name}}</a></div>
+                    <div class="col-4 col"><a href="#">{{item.product.name}}</a></div>
 
-                    <div class="col-2 hidden-xs-down">{{item.qnty}}</div>
+                    <div class="col hidden-xs-down">{{item.qnty}}</div>
 
-                    <div class="col-2 hidden-xs-down">$ {{item.price}}</div>
+                    <div class="col hidden-xs-down">$ {{item.price}}</div>
 
                     <div class="col-xs-2 col-sm-2 col-md-2 col-2"><button style="display: none" class="btn btn-sm btn-outline-danger delitem" id="itemDelButton_{{item.id}}">X</button></div>
 
@@ -77,7 +77,7 @@
     </div>        
 
     <div class="container-fluid my-2 mx-2 rounded">
-        <button class="btn btn-outline-primary btn-lg" style="border-radius:24px" data-toggle="modal" data-target="#newItem"><i class= "fa fa-plus"></i>Add</button>
+        <button class="btn btn-outline-primary" style="border-radius:24px" data-toggle="modal" data-target="#newItem">+Add</button>
         <div class="modal fade" id="newItem" tabindex="-1" role="dialog" arialabeldby="newItem" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -87,13 +87,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="container col-md-12">
+                        <div class="container col-md-12 col-xs-4">
+                            {% set cnt=1 %}
                             {% for category in categories %}
-                            {% if (loop.index is divisibleby 4) or (loop.index == 1) %}<div class="row my-2 mx-2">{% endif %}
-                            <div class="col-md-3 col-xs-2 col-lg-4">
+                            {% if cnt == 1 %}<div class="row">{% endif %}
+                            <div class="col my-1">
                                 <button class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#ItemsInCategory" id="category" data-category="{{ category.name }}">{{ category.name }}</button>
                             </div>
-                            {% if (loop.index is divisibleby 3) %}</div>{% endif %}
+                            {% if (loop.index is divisibleby 3) %}{% set cnt = 0%}</div>{% endif %}
+                            {% set cnt = cnt + 1 %}
                             {% endfor %}
                         </div>
                     </div>
@@ -222,6 +224,7 @@
     </div>
 </div>
 
+
 <script>
     var $SCRIPT_ROOT={{ request.script_root|tojson|safe }};
     var lastTab = localStorage.getItem('lastTab');
@@ -327,7 +330,8 @@
             $('#{{itemform.loop.id}}').val(loop);
         });
 
-        $(".delList").click(function(){
+        $(".delList").on('click',function(){
+            console.log("click delList")
             if(confirm('Do you want to delete '+localStorage.getItem('lastTab')+'?')){
                 var firsttab=$(".nav-tabs a:first").attr("data");
                 localStorage.setItem('lastTab','#' + firsttab);
