@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}{{ Title }}{% endblock %}</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>-->
+        <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+        
+
+        <style type="text/css">
+
+            .bd-pageheader{
+                padding:2remo 15px;
+                color: #cdbfe3;
+                background-color: #563d7c;
+                padding-top:1rem;
+                padding-bottom: 1rem;
+                margin-bottom: 3re;
+                text-align: left;
+
+            }
+
+            #rounded {
+                border: 2px solid #7087a1;
+                padding: 10px 20px;
+                background: #d8dcee;
+                border-radius: 10px;
+                max-width: 350px;
+            }
+
+            #category-table {
+                max-width: 300px;
+                border: 0px;
+            }
+            form {
+                display: inline-block;
+            }
+
+            .modal-header{
+                color: #cdbfe3;
+                background-color:#563d7c;
+            }
+            .modal-content {
+                overflow:hidden;
+            }
+
+
+        </style>
+        {% endblock %}
+    </head>
+    <body>
+
+        <div class="container-fluid">
+            <header class="mt-2 mb-2">
+                <ul class="nav nav-pills nav-justified">
+                    <li class="nav-item"><a class="nav-link {%if request.endpoint.endswith('list_all')%}active{%endif%}" href="{{url_for('list_all')}}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {%if request.endpoint.endswith('new_category')%}active{%endif%}" href="{{url_for('new_category')}}">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link {%if request.endpoint.endswith('new_product')%}active{%endif%}" href="{{url_for('new_product')}}">Products</a></li>
+                    <li class="nav-item"><a class="nav-link {%if request.endpoint.endswith('new_shop')%}active{%endif%}" href="{{url_for('new_shop')}}">Shops</a></li>
+                </ul>
+            </header>
+        </div>
+
+        <div class="container-fluid">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block content %} 
+            {% endblock %}
+        </div>
+
+        <footer id="footer">
+            <div class="container-fluid">
+                <p class="text-center"><i class="fa fa-copyright"></i>Zubik 2017</p>
+            </div>
+        </footer>
+
+    </body>
+</html>
