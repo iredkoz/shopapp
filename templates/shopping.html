@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="container-fluid my-2 rounded">
+<div class="container-fluid my-2 px-0 rounded">
     {% if lists|count > 0 %}
     <ul id="listtab" class="nav nav-tabs flex-column flex-sm-row" role="tablist">
         {% for list in lists %}
@@ -34,38 +34,38 @@
     <div class="tab-content mt-2">
         {% for list in lists %}
         <div class="tab-pane" id="{{list.name}}" role="tabpanel">
-            <ul class="list-group">
+            <ul class="list-group px-0">
                 {% if list.items %}
-                <li class="list-group-item justify-content-md-left border-0">
-                    <div class="col">
-                        {#<b>Done!</b>#}
-                    </div>
-                    <div class="col-4">
+                <li class="list-group-item border-0 px-0">
+                    {#<div class="col">
+                        <b>Done!</b>
+                    </div>#}
+                    <div class="col col-5">
                         <b>Product</b>
                     </div>
-                    <div class="col hidden-xs-down">
+                    <div class="col col-2">
                         <b>Qnty</b>
                     </div>
-                    <div class="col hidden-xs-down">
+                    <div class="col col-3">
                         <b>Price</b>
                     </div>
-                    <div class="col invisible">
+                    <div class="col col-2 invisible">
                         <b>Shop</b>
                     </div>
                 </li>
                 {%endif%}
                 {% for item in items|sort(attribute='shop.name') if item.slist.name == list.name %}
 
-                <li class="list-group-item justify-content-start border-left-0 border-right-0{% if item.chk %} list-group-item-success{% endif %}" {% if item.chk %}style="text-decoration:line-through"{% endif %} id="{{item.id}}">
+                <li class="list-group-item border-left-0 border-right-0{% if item.chk %} list-group-item-success{% endif %} px-0" {% if item.chk %}style="text-decoration:line-through"{% endif %} id="{{item.id}}">
 
-                    <div class="col col"><form method="post" action="{{ url_for('check_item', item_id=item.id) }}"><button class="btn btn-link">{% if item.chk %}<i class="fa fa-check-square-o fa-lg"></i>{%else%}<i class="fa fa-square-o fa-lg"></i>{%endif%}</button></form>
+                    <div class="col col-5"><form method="post" action="{{ url_for('check_item', item_id=item.id) }}"><button class="btn btn-link px-0" style="font-size:14px">{% if item.chk %}<i class="fa fa-check-square-o fa-lg"></i>{%else%}<i class="fa fa-square-o fa-lg"></i>{%endif%} {{item.product.name}}</button></form>
                     </div>
 
-                    <div class="col-4 col"><a href="#">{{item.product.name}}</a></div>
+                    {#<div class="col-4 col"><a href="#">{{item.product.name}}</a></div>#}
 
-                    <div class="col hidden-xs-down">{{item.qnty}}</div>
+                    <div class="col col-2" style = "font-size: 12px">{{item.qnty}}</div>
 
-                    <div class="col hidden-xs-down">$ {{item.price}}</div>
+                    <div class="col col-3" style = "font-size: 12px">$ {{item.price}}</div>
 
                     <div class="col-xs-2 col-sm-2 col-md-2 col-2"><button style="display: none" class="btn btn-sm btn-outline-danger delitem" id="itemDelButton_{{item.id}}">X</button></div>
 
@@ -78,6 +78,7 @@
 
     <div class="container-fluid my-2 mx-2 rounded">
         <button class="btn btn-outline-primary" style="border-radius:24px" data-toggle="modal" data-target="#newItem">+Add</button>
+
         <div class="modal fade" id="newItem" tabindex="-1" role="dialog" arialabeldby="newItem" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -94,7 +95,7 @@
                             <div class="col my-1">
                                 <button class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#ItemsInCategory" id="category" data-category="{{ category.name }}">{{ category.name }}</button>
                             </div>
-                            {% if (loop.index is divisibleby 3) %}{% set cnt = 0%}</div>{% endif %}
+                            {% if (loop.index is divisibleby 3) or loop.last %}{% set cnt = 0%}</div>{% endif %}
                             {% set cnt = cnt + 1 %}
                             {% endfor %}
                         </div>
@@ -104,9 +105,9 @@
 
                         <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Back</span></button>
                     </div>
-                </div> <!-- End of modal-content --> 
-            </div> <!-- End of modal-dialog -->
-        </div> <!-- End of modal  -->
+                </div> 
+            </div>
+        </div>
 
         <div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" arialabeledby="NewCategoryModal" aria-hidden="true">
             <div class="modal-dialog">
@@ -128,6 +129,7 @@
                         </form>                        
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Back</span></button>
                     </div>
                 </div>
             </div>
@@ -149,9 +151,9 @@
                         <button class="btn btn-outline-primary float-left" data-toggle="modal" toggle="modal" data-target="#newItemModal">+New Item</button>
                         <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Back</span></button>
                     </div>
-                </div> <!-- End of modal-content --> 
-            </div> <!-- End of modal-dialog -->
-        </div> <!-- End of modal  -->
+                </div> 
+            </div> 
+        </div> 
 
         <div class="modal fade" id="price_qnty" tabindex="-1" role="dialog" arialabeldby="ItemsInCategory" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -213,11 +215,11 @@
                         {{ form.name(required='required') }}
                         <button type="submit" class="btn btn-primary my-2">SAVE</button>
                     </form>
-                    
+
                 </div>
                 <div class ="modal-footer">
                     <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Back</span></button>
-                    
+
                 </div>
             </div>
         </div>
@@ -239,23 +241,7 @@
 
     $(document).ready(function(){
 
-
         $('[data-toggle="tooltip"]').tooltip();
-
-        /*        var lastTab = localStorage.getItem('lastTab');
-        console.log('lasttab='+lastTab);
-        if (lastTab.length>1 && lastTab!="undefined") {
-            console.log('if');
-            $('#listtab a[href="' + lastTab + '"]').tab('show');
-        }
-        else
-        {
-            console.log('else');
-            $('#listtab a:first').tab('show');
-            localStorage.setItem('lastTab', $('#listtab a:first').attr('href'));
-        }
-*/        
-
 
         $("#newListForm").submit(function(e){
             e.preventDefault();
@@ -268,13 +254,13 @@
             .on({
             'show.bs.modal':function(){
                 var idx = $('.modal:visible').length;
-                $(this).css('z-index', 1040 + (10*idx));
+                $(this).css('z-index', 1040 + (5*idx));
             },
 
             'shown.bs.modal':function(){
                 var idx=($('.modal:visible').length) - 1;
                 $('.modal-backdrop').not('.stacked')
-                    .css('z-index',1039 + (10*idx))
+                    .css('z-index',1039 + (5*idx))
                     .addClass('stacked');
             },
 
@@ -287,6 +273,7 @@
             }
 
         });
+
 
         $('#ItemsInCategory').on('show.bs.modal',function(event){
 
@@ -317,13 +304,8 @@
 
             var button=$(event.relatedTarget);
             var product_name=button.data('product-name');
-            //var list_name = $(".nav-tabs .active").data("name");
             var list_name = localStorage.getItem('lastTab');
             var loop = $(".nav-tabs .active").data("loop");
-
-            console.log(product_name);
-            console.log(list_name.slice(1));
-            console.log(loop);
 
             $('#{{itemform.product_id.id}}').val(product_name);
             $('#{{itemform.list_id.id}}').val(list_name.slice(1));
@@ -349,19 +331,14 @@
         });
 
         $('.list-group li').on('click',function(e){
-            //e.preventDefault();
             item_id=this.id;
-
-            //console.log("show #itemDelButton_"+item_id);
             $(this).parent().find('.delitem:visible').hide();
             $(this).find('#itemDelButton_'+item_id).show();
-        }/*,function(){
-            item_id=this.id;
-            //console.log("hide #itemDelButton_"+item_id);
-            $(this).find('#itemDelButton_'+item_id).hide();
-        }*/);
+        });
 
     });
+
+
 </script>
 
 {% endblock %}
